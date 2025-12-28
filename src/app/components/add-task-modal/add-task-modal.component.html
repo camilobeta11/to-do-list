@@ -1,0 +1,53 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Nueva Tarea</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancelar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
+    <ion-item>
+      <ion-label position="stacked">Título de la tarea <span class="required">*</span></ion-label>
+      <ion-input
+        formControlName="title"
+        type="text"
+        placeholder="Ingresa el título de la tarea"
+        [class.ion-invalid]="hasError('title')">
+      </ion-input>
+    </ion-item>
+    <div *ngIf="hasError('title')" class="error-message">
+      {{ getErrorMessage('title') }}
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">Categoría</ion-label>
+      <ion-select formControlName="categoryId" placeholder="Selecciona una categoría (opcional)">
+        <ion-select-option [value]="null">Sin categoría</ion-select-option>
+        <ion-select-option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="button-container">
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="taskForm.invalid"
+        class="save-button">
+        Guardar
+      </ion-button>
+      <ion-button
+        expand="block"
+        fill="outline"
+        type="button"
+        (click)="cancel()"
+        class="cancel-button">
+        Cancelar
+      </ion-button>
+    </div>
+  </form>
+</ion-content>
