@@ -11,19 +11,24 @@ import {
   IonItemOption,
   IonLabel,
   IonCheckbox,
-  IonChip,
+  IonSegment,
+  IonSegmentButton,
   IonFab,
   IonFabButton,
   IonIcon,
+  IonButton,
+  IonButtons,
   ModalController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { add } from 'ionicons/icons';
+import { add, settings } from 'ionicons/icons';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AllTasksService } from '../services/all-task.service';
+import { CategoriesService } from '../services/categories.service';
 import { Task, Category } from '../interfaces/all-task.interface';
 import { AddTaskModalComponent } from '../components/add-task-modal/add-task-modal.component';
+import { ManageCategoriesModalComponent } from '../components/manage-categories-modal/manage-categories-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -43,10 +48,13 @@ import { AddTaskModalComponent } from '../components/add-task-modal/add-task-mod
     IonItemOption,
     IonLabel,
     IonCheckbox,
-    IonChip,
+    IonSegment,
+    IonSegmentButton,
     IonFab,
     IonFabButton,
-    IonIcon
+    IonIcon,
+    IonButton,
+    IonButtons
   ],
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -61,9 +69,10 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor(
     private tasksService: AllTasksService,
+    private categoriesService: CategoriesService,
     private modalController: ModalController
   ) {
-    addIcons({ add });
+    addIcons({ add, settings });
   }
 
   ngOnInit() {
@@ -74,10 +83,9 @@ export class HomePage implements OnInit, OnDestroy {
       this.applyFilter();
     });
 
-    this.categoriesSubscription = this.tasksService.categories$.subscribe(categories => {
+    this.categoriesSubscription = this.categoriesService.categories$.subscribe(categories => {
       this.categories = categories;
 
-      // Si la categoría seleccionada fue eliminada del sistema, reseteamos el filtro para evitar estados inconsistentes
       const categoryExists = categories.find(cat => cat.id === this.selectedCategoryId);
       if (this.selectedCategoryId && !categoryExists) {
         this.selectedCategoryId = null;
@@ -103,8 +111,31 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   selectCategory(categoryId: string | null): void {
-    this.selectedCategoryId = (this.selectedCategoryId === categoryId) ? null : categoryId;
+    this.selectedCategoryId = categoryId;
     this.applyFilter();
+  }
+
+  getSegmentValue(): string {
+    return this.selectedCategoryId || 'all';
+  }
+
+  onSegmentChange(event: any): void {
+    const value = event.detail.value;
+    this.selectedCategoryId = value === 'all' ? null : value;
+    this.applyFilter();
+  }
+
+  async openManageCategoriesModal(): Promise<void> {
+    try {
+      const modal = await this.modalController.create({
+        component: ManageCategoriesModalComponent
+      });
+
+      await modal.present();
+      await modal.onWillDismiss();
+    } catch (error) {
+      console.error('Error al abrir el modal de categorías:', error);
+    }
   }
 
   applyFilter(): void {

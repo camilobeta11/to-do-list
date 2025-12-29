@@ -16,7 +16,7 @@ import {
   IonButton,
   IonButtons
 } from '@ionic/angular/standalone';
-import { AllTasksService } from '../../services/all-task.service';
+import { CategoriesService } from '../../services/categories.service';
 import { Category } from '../../interfaces/all-task.interface';
 
 @Component({
@@ -48,13 +48,13 @@ export class AddTaskModalComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
-    private tasksService: AllTasksService
+    private categoriesService: CategoriesService
   ) {
     this.initializeForm();
   }
 
   ngOnInit() {
-    this.categoriesSubscription = this.tasksService.categories$.subscribe(categories => {
+    this.categoriesSubscription = this.categoriesService.categories$.subscribe(categories => {
       this.categories = categories;
     });
   }

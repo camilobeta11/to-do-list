@@ -22,39 +22,18 @@
   padding: 0 16px 16px;
   margin-bottom: 8px;
 
-  .categories-container {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 8px 0;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    
-    &::-webkit-scrollbar {
-      display: none;
-    }
+  ion-segment {
+    --background: var(--ion-color-step-50, var(--ion-background-color-step-50));
+    border-radius: 8px;
+    overflow: hidden;
+  }
 
-    .category-chip {
-      // Usar variables que se adaptan al modo oscuro
-      --background: var(--ion-color-step-100, var(--ion-background-color-step-100, #f4f5f8));
-      --color: var(--ion-text-color);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-      font-weight: 500;
-      min-width: fit-content;
-
-      &.selected {
-        --background: var(--ion-color-primary);
-        --color: white;
-        transform: scale(1.05);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      }
-
-      &:hover {
-        transform: scale(1.02);
-      }
-    }
+  ion-segment-button {
+    --indicator-color: var(--ion-color-primary);
+    --color: var(--ion-text-color);
+    --color-checked: white;
+    min-width: auto;
+    font-weight: 500;
   }
 }
 

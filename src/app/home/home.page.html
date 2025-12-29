@@ -3,6 +3,11 @@
     <ion-title>
       Mi Lista de Tareas
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openManageCategoriesModal()">
+        <ion-icon name="settings" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -17,24 +22,16 @@
     <p class="current-date">{{ currentDate }}</p>
   </div>
 
-  <!-- Filtro de Categorías -->
+  <!-- Filtro de Categorías con ion-segment -->
   <div class="categories-section">
-    <div class="categories-container">
-      <ion-chip
-        [class.selected]="selectedCategoryId === null"
-        (click)="selectCategory(null)"
-        class="category-chip">
-        Todas
-      </ion-chip>
-      <ion-chip
-        *ngFor="let category of categories"
-        [class.selected]="selectedCategoryId === category.id"
-        [style.--background]="category.color"
-        (click)="selectCategory(category.id)"
-        class="category-chip">
-        {{ category.name }}
-      </ion-chip>
-    </div>
+    <ion-segment [value]="getSegmentValue()" (ionChange)="onSegmentChange($event)" scrollable="true">
+      <ion-segment-button value="all">
+        <ion-label>Todas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button *ngFor="let category of categories" [value]="category.id">
+        <ion-label>{{ category.name }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </div>
 
   <!-- Lista de Tareas -->

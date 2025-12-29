@@ -1,0 +1,140 @@
+.content-container {
+  padding: 16px;
+}
+
+.form-section {
+  margin-bottom: 32px;
+  
+  h3 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+}
+
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 8px;
+  --background: var(--ion-item-background, var(--ion-background-color));
+  --color: var(--ion-text-color);
+  
+  ion-label {
+    font-weight: 500;
+    color: var(--ion-text-color);
+    
+    .required {
+      color: var(--ion-color-danger);
+    }
+  }
+  
+  ion-input {
+    --color: var(--ion-text-color);
+  }
+}
+
+.error-message {
+  color: var(--ion-color-danger);
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 16px;
+  padding-left: 16px;
+}
+
+.color-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  
+  .color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &.selected {
+      border-color: var(--ion-color-primary);
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.form-actions {
+  margin-top: 24px;
+  
+  ion-button {
+    margin-bottom: 12px;
+  }
+  
+  .edit-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.categories-section {
+  h3 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  
+  .color-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  
+  ion-label {
+    h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ion-text-color);
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ion-color-step-500, var(--ion-text-color-step-500));
+  
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+ion-list {
+  background: transparent;
+}
+
+ion-item-sliding {
+  margin-bottom: 8px;
+  
+  ion-item {
+    border-radius: 8px;
+    --border-radius: 8px;
+  }
+}
+

@@ -1,0 +1,111 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Gestionar Categorías</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="content-container">
+    <!-- Formulario para agregar/editar categoría -->
+    <div class="form-section">
+      <h3>{{ editingCategoryId ? 'Editar Categoría' : 'Nueva Categoría' }}</h3>
+      
+      <form [formGroup]="categoryForm">
+        <ion-item>
+          <ion-label position="stacked">Nombre <span class="required">*</span></ion-label>
+          <ion-input
+            formControlName="name"
+            type="text"
+            placeholder="Nombre de la categoría"
+            [class.ion-invalid]="hasError('name')">
+          </ion-input>
+        </ion-item>
+        <div *ngIf="hasError('name')" class="error-message">
+          El nombre es requerido
+        </div>
+
+        <ion-item>
+          <ion-label position="stacked">Color</ion-label>
+          <div class="color-picker">
+            <button
+              *ngFor="let color of colorPalette"
+              type="button"
+              class="color-option"
+              [style.background-color]="color"
+              [class.selected]="categoryForm.get('color')?.value === color"
+              (click)="selectColor(color)">
+            </button>
+          </div>
+        </ion-item>
+
+        <div class="form-actions">
+          <ion-button
+            *ngIf="!editingCategoryId"
+            expand="block"
+            type="button"
+            (click)="addCategory()"
+            [disabled]="categoryForm.invalid">
+            <ion-icon name="add" slot="start"></ion-icon>
+            Agregar
+          </ion-button>
+          
+          <div *ngIf="editingCategoryId" class="edit-actions">
+            <ion-button
+              expand="block"
+              type="button"
+              (click)="saveEdit()"
+              [disabled]="categoryForm.invalid">
+              <ion-icon name="create" slot="start"></ion-icon>
+              Guardar
+            </ion-button>
+            <ion-button
+              expand="block"
+              fill="outline"
+              type="button"
+              (click)="cancelEdit()">
+              Cancelar
+            </ion-button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Lista de categorías existentes -->
+    <div class="categories-section">
+      <h3>Categorías Existentes</h3>
+      
+      <ion-list *ngIf="categories.length > 0">
+        <ion-item-sliding *ngFor="let category of categories">
+          <ion-item>
+            <div class="category-item">
+              <div class="color-indicator" [style.background-color]="category.color"></div>
+              <ion-label>
+                <h2>{{ category.name }}</h2>
+              </ion-label>
+            </div>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option (click)="startEdit(category)">
+              <ion-icon name="create"></ion-icon>
+              Editar
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="deleteCategory(category)">
+              <ion-icon name="trash"></ion-icon>
+              Eliminar
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+
+      <div *ngIf="categories.length === 0" class="empty-state">
+        <p>No hay categorías creadas</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

@@ -1,25 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Task, Category } from '../interfaces/all-task.interface';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Task } from '../interfaces/all-task.interface';
+import { CategoriesService } from './categories.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AllTasksService {
   private storageInitialized = false;
-
-  // Usamos BehaviorSubject para mantener el estado actual y emitirlo a nuevos suscriptores
   private tasksSubject = new BehaviorSubject<Task[]>([]);
-  private categoriesSubject = new BehaviorSubject<Category[]>([]);
-
   public tasks$: Observable<Task[]> = this.tasksSubject.asObservable();
-  public categories$: Observable<Category[]> = this.categoriesSubject.asObservable();
-
   private readonly TASKS_KEY = 'tasks';
-  private readonly CATEGORIES_KEY = 'categories';
 
-  constructor(private storage: Storage) {
+  constructor(
+    private storage: Storage,
+    private categoriesService: CategoriesService
+  ) {
     this.initStorage();
   }
 
@@ -27,9 +25,7 @@ export class AllTasksService {
     try {
       await this.storage.create();
       this.storageInitialized = true;
-
       await this.loadTasks();
-      await this.loadCategories();
     } catch (error) {
       console.error('Error al inicializar Storage:', error);
     }
@@ -47,18 +43,6 @@ export class AllTasksService {
     }
   }
 
-  private async loadCategories(): Promise<void> {
-    if (!this.storageInitialized) await this.initStorage();
-
-    try {
-      const categories = await this.storage.get(this.CATEGORIES_KEY) || [];
-      this.categoriesSubject.next(categories);
-    } catch (error) {
-      console.error('Error al cargar categorías:', error);
-      this.categoriesSubject.next([]);
-    }
-  }
-
   private async saveTasks(tasks: Task[]): Promise<void> {
     if (!this.storageInitialized) await this.initStorage();
 
@@ -70,16 +54,6 @@ export class AllTasksService {
     }
   }
 
-  private async saveCategories(categories: Category[]): Promise<void> {
-    if (!this.storageInitialized) await this.initStorage();
-
-    try {
-      await this.storage.set(this.CATEGORIES_KEY, categories);
-      this.categoriesSubject.next(categories);
-    } catch (error) {
-      console.error('Error al guardar categorías:', error);
-    }
-  }
 
   async addTask(task: Task): Promise<void> {
     const updatedTasks = [...this.tasksSubject.value, task];
@@ -98,16 +72,9 @@ export class AllTasksService {
     await this.saveTasks(updatedTasks);
   }
 
-  async addCategory(category: Category): Promise<void> {
-    const updatedCategories = [...this.categoriesSubject.value, category];
-    await this.saveCategories(updatedCategories);
-  }
-
   async deleteCategory(categoryId: string): Promise<void> {
-    const updatedCategories = this.categoriesSubject.value.filter(cat => cat.id !== categoryId);
-    await this.saveCategories(updatedCategories);
+    await this.categoriesService.deleteCategory(categoryId);
 
-    // Al eliminar una categoría, desvinculamos todas las tareas que la tenían asignada
     const updatedTasks = this.tasksSubject.value.map(task =>
       task.categoryId === categoryId ? { ...task, categoryId: undefined } : task
     );
@@ -118,7 +85,14 @@ export class AllTasksService {
     return this.tasksSubject.value;
   }
 
-  getCategories(): Category[] {
-    return this.categoriesSubject.value;
+  getFilteredTasks(categoryId: string | null): Observable<Task[]> {
+    return combineLatest([this.tasks$, this.categoriesService.categories$]).pipe(
+      map(([tasks, categories]) => {
+        if (categoryId === null) {
+          return tasks;
+        }
+        return tasks.filter(task => task.categoryId === categoryId);
+      })
+    );
   }
 }
