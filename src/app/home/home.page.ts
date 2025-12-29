@@ -26,7 +26,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AllTasksService } from '../services/all-task.service';
 import { CategoriesService } from '../services/categories.service';
-import { FeatureFlag } from '../services/feature-flag';
+import { FeatureFlag } from '../services/feature-flag.service';
 import { Task, Category } from '../interfaces/all-task.interface';
 import { AddTaskModalComponent } from '../components/add-task-modal/add-task-modal.component';
 import { ManageCategoriesModalComponent } from '../components/manage-categories-modal/manage-categories-modal.component';
@@ -85,12 +85,12 @@ export class HomePage implements OnInit, OnDestroy {
     // Inicializar Remote Config
     try {
       await this.featureFlag.initRemoteConfig();
-      this.remoteConfigActive = true;
       this.showDeleteButton = this.featureFlag.shouldShowDelete();
+      this.remoteConfigActive = this.showDeleteButton;
     } catch (error) {
       console.error('Error al inicializar Remote Config:', error);
       this.remoteConfigActive = false;
-      this.showDeleteButton = true; // Valor por defecto
+      this.showDeleteButton = false; // Valor por defecto
     }
 
     this.tasksSubscription = this.tasksService.tasks$.subscribe(tasks => {

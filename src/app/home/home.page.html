@@ -3,7 +3,7 @@
     <ion-title>
       Mi Lista de Tareas
     </ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="remoteConfigActive">
       <ion-button (click)="openManageCategoriesModal()">
         <ion-icon name="settings" slot="icon-only"></ion-icon>
       </ion-button>
@@ -72,8 +72,14 @@
   </ion-fab>
 
   <!-- Indicador de Remote Config -->
-  <div class="remote-config-indicator" *ngIf="remoteConfigActive">
-    <span class="indicator-dot"></span>
-    <span class="indicator-text">Remote Config Activo</span>
-  </div>
+  <div class="remote-config-indicator" *ngIf="remoteConfigActive else noRemoteConfig">
+      <span class="indicator-dot"></span>
+      <span class="indicator-text">Remote Config Activo</span>
+    </div>
+    <ng-template #noRemoteConfig>
+      <div class="remote-config-indicator-inactive">
+        <span class="indicator-text-inactive">Remote Config Inactivo</span>
+      </div>
+    </ng-template>
+
 </ion-content>

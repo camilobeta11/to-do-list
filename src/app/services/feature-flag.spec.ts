@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FeatureFlag } from './feature-flag';
+import { FeatureFlag } from './feature-flag.service';
 
 describe('FeatureFlag', () => {
   let service: FeatureFlag;

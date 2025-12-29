@@ -111,7 +111,7 @@ ion-fab {
     --background: var(--ion-color-primary);
     --background-activated: var(--ion-color-primary-shade);
     --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    
+
     &:hover {
       --box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     }
@@ -150,6 +150,39 @@ ion-fab {
   }
 }
 
+.remote-config-indicator-inactive {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--ion-color-danger);
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  z-index: 999;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  margin-bottom: 0;
+
+  .indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    animation: pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .indicator-text {
+    letter-spacing: 0.5px;
+  }
+}
+
+
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -170,7 +203,7 @@ ion-fab {
   .tasks-section {
     ion-item {
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      
+
       &:hover {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
       }
