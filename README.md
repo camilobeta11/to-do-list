@@ -13,6 +13,8 @@ Aplicación móvil desarrollada con **Ionic** y **Angular** para la gestión efi
 - 🌓 Soporte para modo claro y oscuro
 - 📱 Interfaz moderna y responsiva
 
+> 📖 Para más información sobre los desafíos técnicos, optimizaciones y decisiones de arquitectura, consulta el archivo [RESPUESTAS.md](./RESPUESTAS.md).
+
 ## 🛠️ Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
