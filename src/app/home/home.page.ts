@@ -26,6 +26,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AllTasksService } from '../services/all-task.service';
 import { CategoriesService } from '../services/categories.service';
+import { FeatureFlag } from '../services/feature-flag';
 import { Task, Category } from '../interfaces/all-task.interface';
 import { AddTaskModalComponent } from '../components/add-task-modal/add-task-modal.component';
 import { ManageCategoriesModalComponent } from '../components/manage-categories-modal/manage-categories-modal.component';
@@ -63,6 +64,8 @@ export class HomePage implements OnInit, OnDestroy {
   filteredTasks: Task[] = [];
   selectedCategoryId: string | null = null;
   currentDate: string = '';
+  showDeleteButton: boolean = true;
+  remoteConfigActive: boolean = false;
 
   private tasksSubscription?: Subscription;
   private categoriesSubscription?: Subscription;
@@ -70,13 +73,25 @@ export class HomePage implements OnInit, OnDestroy {
   constructor(
     private tasksService: AllTasksService,
     private categoriesService: CategoriesService,
+    private featureFlag: FeatureFlag,
     private modalController: ModalController
   ) {
     addIcons({ add, settings });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.updateCurrentDate();
+
+    // Inicializar Remote Config
+    try {
+      await this.featureFlag.initRemoteConfig();
+      this.remoteConfigActive = true;
+      this.showDeleteButton = this.featureFlag.shouldShowDelete();
+    } catch (error) {
+      console.error('Error al inicializar Remote Config:', error);
+      this.remoteConfigActive = false;
+      this.showDeleteButton = true; // Valor por defecto
+    }
 
     this.tasksSubscription = this.tasksService.tasks$.subscribe(tasks => {
       this.tasks = tasks;

@@ -3,9 +3,13 @@ import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules } 
 import { PLATFORM_ID } from '@angular/core';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 import { Storage, StorageConfigToken, provideStorage } from '@ionic/storage-angular';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideRemoteConfig, getRemoteConfig } from '@angular/fire/remote-config';
+import { provideAnalytics, getAnalytics } from '@angular/fire/analytics';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -21,5 +25,9 @@ bootstrapApplication(AppComponent, {
       useFactory: provideStorage,
       deps: [PLATFORM_ID, StorageConfigToken],
     },
+    // Firebase Configuration
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideRemoteConfig(() => getRemoteConfig()),
+    provideAnalytics(() => getAnalytics()),
   ],
 });

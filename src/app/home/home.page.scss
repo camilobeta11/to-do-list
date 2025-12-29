@@ -118,6 +118,49 @@ ion-fab {
   }
 }
 
+.remote-config-indicator {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--ion-color-success);
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  z-index: 999;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  margin-bottom: 0;
+
+  .indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    animation: pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .indicator-text {
+    letter-spacing: 0.5px;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+}
+
 // Ajustes adicionales para modo oscuro (si es necesario)
 @media (prefers-color-scheme: dark) {
   .header-section {
