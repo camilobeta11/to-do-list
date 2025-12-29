@@ -23,6 +23,7 @@ import {
 import { addIcons } from 'ionicons';
 import { add, settings } from 'ionicons/icons';
 import { CommonModule } from '@angular/common';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs';
 import { AllTasksService } from '../services/all-task.service';
 import { CategoriesService } from '../services/categories.service';
@@ -38,11 +39,11 @@ import { ManageCategoriesModalComponent } from '../components/manage-categories-
   standalone: true,
   imports: [
     CommonModule,
+    ScrollingModule,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonContent,
-    IonList,
     IonItem,
     IonItemSliding,
     IonItemOptions,
@@ -187,6 +188,10 @@ export class HomePage implements OnInit, OnDestroy {
     if (!categoryId) return 'Sin categoría';
     const category = this.categories.find(cat => cat.id === categoryId);
     return category?.name || 'Sin categoría';
+  }
+
+  trackByTaskId(index: number, task: Task): string {
+    return task.id;
   }
 
   async openAddTaskModal(): Promise<void> {

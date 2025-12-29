@@ -34,10 +34,13 @@
     </ion-segment>
   </div>
 
-  <!-- Lista de Tareas -->
+  <!-- Lista de Tareas con Virtual Scroll -->
   <div class="tasks-section">
-    <ion-list *ngIf="filteredTasks.length > 0">
-      <ion-item-sliding *ngFor="let task of filteredTasks">
+    <cdk-virtual-scroll-viewport
+      itemSize="80"
+      *ngIf="filteredTasks.length > 0"
+      class="virtual-scroll-viewport">
+      <ion-item-sliding *cdkVirtualFor="let task of filteredTasks; trackBy: trackByTaskId">
         <ion-item>
           <ion-checkbox
             slot="start"
@@ -57,7 +60,7 @@
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
-    </ion-list>
+    </cdk-virtual-scroll-viewport>
 
     <div *ngIf="filteredTasks.length === 0" class="empty-state">
       <p>No hay tareas{{ selectedCategoryId ? ' en esta categoría' : '' }}</p>
